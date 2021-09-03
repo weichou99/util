@@ -28,7 +28,7 @@ public class DownloadServlet extends HttpServlet {
     File logsFile = new File(catalinaBaseFile, "logs");
     File file = new File(logsFile, filename);
 
-    long length = file.length();
+    long fileLength = file.length();
 
     resp.setContentType("text/plain");
     resp.addHeader("Content-Encoding", "gzip");
@@ -41,8 +41,8 @@ public class DownloadServlet extends HttpServlet {
       byte[] buffer = new byte[ARBITARY_SIZE];
 
       int numBytesRead;
-      while ((numBytesRead = in.read(buffer)) > 0) {
-        System.out.println(numBytesRead);
+      while (fileLength > 0 && (numBytesRead = in.read(buffer)) > 0) {
+        fileLength = fileLength - numBytesRead;
         gzipo.write(buffer, 0, numBytesRead);
       }
       gzipo.finish();
